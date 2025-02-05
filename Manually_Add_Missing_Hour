@@ -1,0 +1,38 @@
+hour=7
+t_stamp=system.date.setTime(system.date.now(), hour, 0, 0)
+line='9'
+path=''
+shift_24_7= False
+sch_rate=0
+runout=0
+
+hourly_paths=[
+		path + '/CNT',
+		path + '/CNT_FLTSTP',
+		path + '/CNT_INFSTP',
+		path + '/CNT_MISCSTP',
+		path + '/CNT_OUTSTP',
+		path + '/CNT_REJ',
+		path + '/CNT_RUN',
+		path + '/CNT_SAFSTP',
+		path + '/CNT_STP',
+		path + '/CNT_USRSTP',
+		path + '/TIME_AVA',
+		path + '/TIME_BREAK',
+		path + '/TIME_FLTSTP',
+		path + '/TIME_INFSTP',
+		path + '/TIME_MISCSTP',
+		path + '/TIME_OUTSTP',
+		path + '/TIME_PRDRUN',
+		path + '/TIME_RUN',
+		path + '/TIME_SAFSTP',
+		path + '/TIME_SETUP',
+		path + '/TIME_STP',
+		path + '/TIME_USRSTP',
+		]
+
+fields=['Line','Hour','t_stamp','sch_rate','TIME_RUNOUT','"24_7"']+[tag.replace(path + '/','') for tag in hourly_paths]
+values=[line,hour,t_stamp,sch_rate,runout,shift_24_7]+[0 for val in hourly_paths]
+var='(' + str('?,'*len(fields))[:-1]+')'
+
+system.db.runPrepUpdate('INSERT vinpac_production.FSR_Hourly ' + '('+ str([val for val in fields])[1:-1].replace("'",'') + ')'+ ' Values '+ var, values, 'MSSQL_Angaston')
